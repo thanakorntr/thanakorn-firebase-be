@@ -1,0 +1,5 @@
+target
+thanakornfirebase.iml
+.idea
+src/resources/*.json
+build.gradle
