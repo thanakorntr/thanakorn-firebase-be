@@ -9,6 +9,7 @@ import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.SessionCookieOptions;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 
 public class FirebaseAuthService {
+
   private static final FluentLogger LOGGER = FluentLogger.forEnclosingClass();
 
   // For App Engine, these won't be used.
@@ -28,13 +30,15 @@ public class FirebaseAuthService {
   private static final String SENDER_EMAIL_PASSWORD = "YOUR_SENDER_EMAIL_PASSWORD_FOR_LOCAL_RUN";
 
   private static final String BE_SERVICE_ACCOUNT_FILE_NAME
-      = "thanakorn-firebase-be-firebase-adminsdk-hkyjz-8b36476567.json";
+      = "thanakorn-firebase-be2-firebase-adminsdk-9pxjo-37f57df683.json";
 
   public static void main(String[] args) throws Exception {
     FirebaseAuthService authService = new FirebaseAuthService();
 
-    safePublishInternal(authService);
-    // verifyTokenId(authService);
+    // safePublishInternal(authService);
+    authService.verifyTokenId("eyJhbGciOiJSUzI1NiIsImtpZCI6ImFlNTJiOGQ4NTk4N2U1OWRjYWM2MmJlNzg2YzcwZTAyMDcxN2I0MTEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGhhbmFrb3JuLWZpcmViYXNlLWJlIiwiYXVkIjoidGhhbmFrb3JuLWZpcmViYXNlLWJlIiwiYXV0aF90aW1lIjoxNjMyMTgxODQ2LCJ1c2VyX2lkIjoiT2o3U3FydzdWWlUyWUVhWmtLUVdNU3dibVhKMiIsInN1YiI6Ik9qN1Nxcnc3VlpVMllFYVprS1FXTVN3Ym1YSjIiLCJpYXQiOjE2MzIxODE4NDcsImV4cCI6MTYzMjE4NTQ0NywiZW1haWwiOiJ0aGFuYWtvcm4uYW1wMTBAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGhhbmFrb3JuLmFtcDEwQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.uqX1AUb10X6EwLtRguUXK3pQBcsXrueW9haUbjGH6Xj4YB1PaftJnqdFNg6CNnS9hore0-L1KQZbhPEbvsog3vJbxKmrlFniP7lWF2L4yyrPaNL_ox8bRCWWrdDTjn26yj6mF2T56WKPHkdOln-Mx_NGmGVnTQryQUOt3qn0t0n3_NLhI64htJ4WKtMghTmMU8n48xpb77xqDae4ozvaFgVCUaCCyA_vYEt3NdGFjIwD4knj_Dtu4bktMx9cn3EpzPhyIKJHM6iCYe1X74zvTVGHtaYWdyu4-rHxlAz9ph7HxA38jh33Gt9dSdNbXrroFmfH3cdMQ2jaXYx2sXnubA");
+    createSessionCookie(
+        "eyJhbGciOiJSUzI1NiIsImtpZCI6ImFlNTJiOGQ4NTk4N2U1OWRjYWM2MmJlNzg2YzcwZTAyMDcxN2I0MTEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGhhbmFrb3JuLWZpcmViYXNlLWJlIiwiYXVkIjoidGhhbmFrb3JuLWZpcmViYXNlLWJlIiwiYXV0aF90aW1lIjoxNjMyMTgxODQ2LCJ1c2VyX2lkIjoiT2o3U3FydzdWWlUyWUVhWmtLUVdNU3dibVhKMiIsInN1YiI6Ik9qN1Nxcnc3VlpVMllFYVprS1FXTVN3Ym1YSjIiLCJpYXQiOjE2MzIxODE4NDcsImV4cCI6MTYzMjE4NTQ0NywiZW1haWwiOiJ0aGFuYWtvcm4uYW1wMTBAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGhhbmFrb3JuLmFtcDEwQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.uqX1AUb10X6EwLtRguUXK3pQBcsXrueW9haUbjGH6Xj4YB1PaftJnqdFNg6CNnS9hore0-L1KQZbhPEbvsog3vJbxKmrlFniP7lWF2L4yyrPaNL_ox8bRCWWrdDTjn26yj6mF2T56WKPHkdOln-Mx_NGmGVnTQryQUOt3qn0t0n3_NLhI64htJ4WKtMghTmMU8n48xpb77xqDae4ozvaFgVCUaCCyA_vYEt3NdGFjIwD4knj_Dtu4bktMx9cn3EpzPhyIKJHM6iCYe1X74zvTVGHtaYWdyu4-rHxlAz9ph7HxA38jh33Gt9dSdNbXrroFmfH3cdMQ2jaXYx2sXnubA");
   }
 
   private static void safePublishInternal(FirebaseAuthService authService) throws Exception {
@@ -47,9 +51,17 @@ public class FirebaseAuthService {
     authService.sendCustomEmail(recipientUserEmail, link);
   }
 
-  private static void verifyTokenId(FirebaseAuthService authService, String tokenId) throws Exception {
+  private static void verifyTokenId(FirebaseAuthService authService, String tokenId)
+      throws Exception {
     FirebaseToken token = authService.verifyTokenId(tokenId);
     System.out.println(token.getUid());
+  }
+
+  private static String createSessionCookie(String tokenId) throws Exception {
+    SessionCookieOptions options = SessionCookieOptions.builder().setExpiresIn(360000L).build();
+    String cookie = FirebaseAuth.getInstance().createSessionCookie(tokenId, options);
+    System.out.println("Cookie: " + cookie);
+    return cookie;
   }
 
   FirebaseAuthService() {
@@ -65,9 +77,10 @@ public class FirebaseAuthService {
   String generateEmailLinkForSignIn(String recipientEmail) throws FirebaseAuthException {
     String url;
     if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
-      url = "https://thanakorn-firebase-fe.uk.r.appspot.com/";
+      url = "https://thanakorn-firebase-fe2.ue.r.appspot.com/";
     } else {
       url = "http://localhost:4200/";
+      url = "https://thanakorn-firebase-fe2.ue.r.appspot.com/";
     }
     ActionCodeSettings actionCodeSettings = ActionCodeSettings.builder()
         .setUrl(url)
@@ -125,8 +138,8 @@ public class FirebaseAuthService {
         .getResourceAsStream(BE_SERVICE_ACCOUNT_FILE_NAME);
     FirebaseOptions options = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(is))
-        .setProjectId("thanakorn-firebase-be")
-        .setServiceAccountId("112670844804760466853")
+        .setProjectId("thanakorn-firebase-be2")
+        .setServiceAccountId("101162103660673683324")
         .build();
     return FirebaseApp.initializeApp(options);
   }
