@@ -12,7 +12,7 @@ import javax.mail.internet.MimeMessage;
 public class AppEngineMail {
   private static final FluentLogger LOGGER = FluentLogger.forEnclosingClass();
 
-  private static final String SENDER_EMAIL = "no-reply@thanakorn-firebase-be2.appspotmail.com";
+  private static final String SENDER_EMAIL = "no-reply@thanakorn-firebase-be3.appspotmail.com";
 
   static void sendEmail(String recipientAddress, String link) {
     Properties props = new Properties();

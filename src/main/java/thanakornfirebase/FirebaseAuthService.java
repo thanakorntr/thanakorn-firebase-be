@@ -30,7 +30,7 @@ public class FirebaseAuthService {
   private static final String SENDER_EMAIL_PASSWORD = "YOUR_SENDER_EMAIL_PASSWORD_FOR_LOCAL_RUN";
 
   private static final String BE_SERVICE_ACCOUNT_FILE_NAME
-      = "thanakorn-firebase-be2-firebase-adminsdk-9pxjo-37f57df683.json";
+      = "thanakorn-firebase-be3-firebase-adminsdk-pu8qn-46c9e75cc8.json";
 
   public static void main(String[] args) throws Exception {
     FirebaseAuthService authService = new FirebaseAuthService();
@@ -77,10 +77,10 @@ public class FirebaseAuthService {
   String generateEmailLinkForSignIn(String recipientEmail) throws FirebaseAuthException {
     String url;
     if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
-      url = "https://thanakorn-firebase-fe2.ue.r.appspot.com/";
+      url = "https://thanakorn-firebase-fe3.ue.r.appspot.com/";
     } else {
       url = "http://localhost:4200/";
-      url = "https://thanakorn-firebase-fe2.ue.r.appspot.com/";
+      url = "https://thanakorn-firebase-fe3.ue.r.appspot.com/";
     }
     ActionCodeSettings actionCodeSettings = ActionCodeSettings.builder()
         .setUrl(url)
@@ -138,8 +138,8 @@ public class FirebaseAuthService {
         .getResourceAsStream(BE_SERVICE_ACCOUNT_FILE_NAME);
     FirebaseOptions options = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(is))
-        .setProjectId("thanakorn-firebase-be2")
-        .setServiceAccountId("101162103660673683324")
+        .setProjectId("thanakorn-firebase-be3")
+        .setServiceAccountId("117041882942638156691")
         .build();
     return FirebaseApp.initializeApp(options);
   }

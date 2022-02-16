@@ -107,7 +107,7 @@
                 <version>2.0.1</version>
                 <configuration>
                     <!-- plugin configuration -->
-                    <hostname>thanakorn-firebase-be2.appspot.com</hostname>
+                    <hostname>thanakorn-firebase-be3.appspot.com</hostname>
                 </configuration>
             </plugin>
             <plugin>
